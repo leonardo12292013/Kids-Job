@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Ищу работу в 11 лет — PRO версия</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            margin: 0; padding: 20px;
+            min-height: 100vh;
+            color: #fff;
+            display: flex; flex-direction: column; align-items: center;
+        }
+
+        h1 {
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-shadow: 0 0 5px rgba(0,0,0,0.3);
+        }
+
+        form {
+            background: rgba(255 255 255 / 0.15);
+            padding: 20px 25px;
+            border-radius: 15px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+            max-width: 450px;
+            width: 100%;
+            margin-bottom: 25px;
+            backdrop-filter: blur(10px);
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        form input[type="text"],
+        form input[type="file"] {
+            width: 100%;
+            padding: 12px 15px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            border: none;
+            font-size: 16px;
+            transition: background-color 0.3s, box-shadow 0.3s;
+            background: rgba(255 255 255 / 0.3);
+            color: #111;
+        }
+
+        form input[type="text"]:focus,
+        form input[type="file"]:focus {
+            outline: none;
+            background: rgba(255 255 255 / 0.5);
+            box-shadow: 0 0 10px #2575fc;
+        }
+
+        form button {
+            width: 100%;
+            background: #2575fc;
+            border: none;
+            color: white;
+            font-weight: 700;
+            font-size: 18px;
+            padding: 14px 0;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+            box-shadow: 0 6px 15px rgba(37, 117, 252, 0.6);
+        }
+        form button:hover {
+            background: #164dca;
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(22, 77, 202, 0.8);
+        }
+
+        #filterContainer {
+            display: flex;
+            gap: 10px;
+            max-width: 450px;
+            width: 100%;
+            margin-bottom: 30px;
+        }
+
+        #filter {
+            flex-grow: 1;
+            padding: 12px 15px;
+            font-size: 16px;
+            border-radius: 12px;
+            border: none;
+            background: rgba(255 255 255 / 0.15);
+            color: #fff;
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+        #filter::placeholder {
+            color: #ddd;
+        }
+        #filter:focus {
+            outline: none;
+            background: rgba(255 255 255 / 0.35);
+            box-shadow: 0 0 15px #6a11cb;
+            color: #111;
+        }
+
+        #resetFilterBtn {
+            background: #e94560;
+            border: none;
+            border-radius: 12px;
+            padding: 12px 18px;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            color: white;
+            box-shadow: 0 6px 12px rgba(233, 69, 96, 0.7);
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        #resetFilterBtn:hover {
+            background: #b12c42;
+            transform: scale(1.05);
+        }
+
+        #profiles {
+            display: grid;
+            grid-template-columns: repeat(auto-fill,minmax(230px,1fr));
+            gap: 25px;
+            width: 100%;
+            max-width: 900px;
+        }
+
+        .profile-card {
+            background: rgba(255 255 255 / 0.15);
+            border-radius: 18px;
+            padding: 20px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+            color: #111;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: default;
+            backdrop-filter: blur(10px);
+            animation: popIn 0.4s ease forwards;
+        }
+        .profile-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.45);
+        }
+
+        .profile-card img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 4px solid #2575fc;
+            margin-bottom: 15px;
+            user-select: none;
+        }
+
+        .profile-card h3 {
+            margin: 0 0 10px 0;
+            font-size: 22px;
+            font-weight: 700;
+            color: #222;
+        }
+
+        .profile-card p {
+            font-size: 15px;
+            color: #444;
+            text-align: center;
+            white-space: pre-wrap;
+            margin-bottom: 20px;
+            min-height: 40px;
+        }
+
+        .card-buttons {
+            display: flex;
+            gap: 15px;
+        }
+        .btn {
+            background: #2575fc;
+            border: none;
+            color: white;
+            font-weight: 700;
+            padding: 8px 14px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            box-shadow: 0 4px 10px rgba(37, 117, 252, 0.6);
+            transition: background-color 0.3s, transform 0.2s;
+            user-select: none;
+        }
+        .btn:hover {
+            background: #164dca;
+            transform: scale(1.1);
+        }
+        .btn.delete {
+            background: #e94560;
+            box-shadow: 0 4px 10px rgba(233, 69, 96, 0.6);
+        }
+        .btn.delete:hover {
+            background: #b12c42;
+            transform: scale(1.1);
+        }
+
+        /* Popup modal */
+        #editModal {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        #editModal.active {
+            display: flex;
+        }
+        #editForm {
+            background: white;
+            border-radius: 20px;
+            padding: 25px 30px;
+            max-width: 400px;
+            width: 90%;
+            color: #222;
+            box-shadow: 0 6px 25px rgba(0,0,0,0.4);
+            animation: fadeInDown 0.4s ease forwards;
+        }
+        #editForm h2 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+        #editForm input[type="text"],
+        #editForm input[type="file"] {
+            width: 100%;
+            padding: 12px 15px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+        #editForm button {
+            background: #2575fc;
+            color: white;
+            font-weight: 700;
+            border: none;
+            padding: 12px;
+            border-radius: 12px;
+            width: 100%;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background-color 0.3s;
+        }
+        #editForm button:hover {
+            background: #164dca;
+        }
+        #editForm .closeBtn {
+            background: #e94560;
+            margin-top: 10px;
+        }
+        #editForm .closeBtn:hover {
+            background: #b12c42;
+        }
+
+        /* Notification */
+        #notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #2575fc;
+            color: white;
+            padding: 14px 22px;
+            border-radius: 15px;
+            box-shadow: 0 6px 18px rgba(37, 117, 252, 0.8);
+            font-weight: 700;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+            z-index: 1100;
+        }
+        #notification.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            0% {opacity: 0; transform: translateY(30px);}
+            100% {opacity: 1; transform: translateY(0);}
+        }
+        @keyframes popIn {
+            0% {opacity: 0; transform: scale(0.9);}
+            100% {opacity: 1; transform: scale(1);}
+        }
+        @keyframes fadeInDown {
+            0% {opacity: 0; transform: translateY(-30px);}
+            100% {opacity: 1; transform: translateY(0);}
+        }
+
+        @media(max-width: 480px) {
+            form, #filterContainer, #profiles {
+                max-width: 100%;
+                padding: 0 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<h1>Ищу работу в 11 лет — PRO версия</h1>
+
+<form id="addForm" autocomplete="off">
+    <input type="text" id="nameInput" placeholder="Имя и Фамилия" required />
+    <input type="text" id="skillsInput" placeholder="Навыки (через запятую)" required />
+    <input type="file" id="photoInput" accept="image/*" />
+    <button type="submit">Добавить профиль</button>
+</form>
+
+<div id="filterContainer">
+    <input type="text" id="filter" placeholder="Поиск по имени или навыкам..." />
+    <button id="resetFilterBtn" title="Сбросить фильтр">Сброс</button>
+</div>
+
+<div id="profiles"></div>
+
+<!-- Редактирование -->
+<div id="editModal">
+    <form id="editForm" autocomplete="off">
+        <h2>Редактировать профиль</h2>
+        <input type="text" id="editName" placeholder="Имя и Фамилия" required />
+        <input type="text" id="editSkills" placeholder="Навыки (через запятую)" required />
+        <input type="file" id="editPhoto" accept="image/*" />
+        <button type="submit">Сохранить изменения</button>
+        <button type="button" class="closeBtn">Отмена</button>
+    </form>
+</div>
+
+<div id="notification"></div>
+
+<script>
+    const addForm = document.getElementById('addForm');
+    const nameInput = document.getElementById('nameInput');
+    const skillsInput = document.getElementById('skillsInput');
+    const photoInput = document.getElementById('photoInput');
+    const profilesContainer = document.getElementById('profiles');
+    const filterInput = document.getElementById('filter');
+    const resetFilterBtn = document.getElementById('resetFilterBtn');
+
+    const editModal = document.getElementById('editModal');
+    const editForm = document.getElementById('editForm');
+    const editName = document.getElementById('editName');
+    const editSkills = document.getElementById('editSkills');
+    const editPhoto = document.getElementById('editPhoto');
+    const closeEditBtn = editForm.querySelector('.closeBtn');
+
+    const notification = document.getElementById('notification');
+
+    let profiles = [];
+    let editingIndex = null;
+
+    function showNotification(text, duration=2500) {
+        notification.textContent = text;
+        notification.classList.add('show');
+        setTimeout(() => {
+            notification.classList.remove('show');
+        }, duration);
+    }
+
+    function createProfileCard(profile, index) {
+        const card = document.createElement('div');
+        card.className = 'profile-card';
+
+        const img = document.createElement('img');
+        img.src = profile.photo || 'https://via.placeholder.com/100?text=Фото';
+        img.alt = profile.name;
+        card.appendChild(img);
+
+        const name = document.createElement('h3');
+        name.textContent = profile.name;
+        card.appendChild(name);
+
+        const skills = document.createElement('p');
+        skills.textContent = profile.skills.join(', ');
+        card.appendChild(skills);
+
+        const btns = document.createElement('div');
+        btns.className = 'card-buttons';
+
+        const editBtn = document.createElement('button');
+        editBtn.className = 'btn edit';
+        editBtn.textContent = 'Редактировать';
+        editBtn.onclick = () => openEditModal(index);
+        btns.appendChild(editBtn);
+
+        const delBtn = document.createElement('button');
+        delBtn.className = 'btn delete';
+        delBtn.textContent = 'Удалить';
+        delBtn.onclick = () => deleteProfile(index);
+        btns.appendChild(delBtn);
+
+        card.appendChild(btns);
+
+        return card;
+    }
+
+    function renderProfiles(filterText = '') {
+        profilesContainer.innerHTML = '';
+        const ft = filterText.toLowerCase();
+
+        const filtered = profiles.filter(p => {
+            return p.name.toLowerCase().includes(ft) ||
+                p.skills.some(s => s.toLowerCase().includes(ft));
+        });
+
+        if(filtered.length === 0) {
+            const noData = document.createElement('p');
+            noData.textContent = 'Профили не найдены.';
+            noData.style.color = 'white';
+            noData.style.textAlign = 'center';
+            profilesContainer.appendChild(noData);
+            return;
+        }
+
+        filtered.forEach((profile, i) => {
+            profilesContainer.appendChild(createProfileCard(profile, i));
+        });
+    }
+
+    function deleteProfile(index) {
+        if(confirm(`Удалить профиль "${profiles[index].name}"?`)) {
+            profiles.splice(index, 1);
+            renderProfiles(filterInput.value);
+            showNotification('Профиль удалён');
+        }
+    }
+
+    function openEditModal(index) {
+        editingIndex = index;
+        const profile = profiles[index];
+        editName.value = profile.name;
+        editSkills.value = profile.skills.join(', ');
+        editPhoto.value = null;
+        editModal.classList.add('active');
+    }
+
+    function closeEditModal() {
+        editingIndex = null;
+        editModal.classList.remove('active');
+        editForm.reset();
+    }
+
+    addForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const name = nameInput.value.trim();
+        const skills = skillsInput.value.split(',').map(s => s.trim()).filter(s => s.length > 0);
+
+        if(!name || skills.length === 0) {
+            alert('Введите имя и хотя бы один навык!');
+            return;
+        }
+
+        let photo = null;
+        if(photoInput.files[0]) {
+            photo = await readFileAsDataURL(photoInput.files[0]);
+        }
+
+        profiles.push({ name, skills, photo });
+        renderProfiles(filterInput.value);
+
+        addForm.reset();
+        showNotification('Профиль добавлен');
+    });
+
+    editForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        if(editingIndex === null) return;
+
+        const name = editName.value.trim();
+        const skills = editSkills.value.split(',').map(s => s.trim()).filter(s => s.length > 0);
+
+        if(!name || skills.length === 0) {
+            alert('Введите имя и хотя бы один навык!');
+            return;
+        }
+
+        let photo = profiles[editingIndex].photo;
+        if(editPhoto.files[0]) {
+            photo = await readFileAsDataURL(editPhoto.files[0]);
+        }
+
+        profiles[editingIndex] = { name, skills, photo };
+        renderProfiles(filterInput.value);
+        closeEditModal();
+        showNotification('Профиль обновлён');
+    });
+
+    closeEditBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        closeEditModal();
+    });
+
+    filterInput.addEventListener('input', () => {
+        renderProfiles(filterInput.value);
+    });
+
+    resetFilterBtn.addEventListener('click', () => {
+        filterInput.value = '';
+        renderProfiles();
+    });
+
+    function readFileAsDataURL(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = () => reject(new Error('Ошибка чтения файла'));
+            reader.readAsDataURL(file);
+        });
+    }
+
+    // Инициализация с примером
+    profiles = [
+        {
+            name: 'Леонардо К.',
+            skills: ['Python', 'HTML', 'Музыка'],
+            photo: 'https://i.pravatar.cc/100?u=leo'
+        },
+        {
+            name: 'Анна М.',
+            skills: ['C#', 'Unity', 'Анимация'],
+            photo: 'https://i.pravatar.cc/100?u=anna'
+        },
+        {
+            name: 'Даниель В.',
+            skills: ['JavaScript', 'DJ', 'Игры'],
+            photo: 'https://i.pravatar.cc/100?u=daniel'
+        }
+    ];
+
+    renderProfiles();
+
+</script>
+</body>
+</html>
